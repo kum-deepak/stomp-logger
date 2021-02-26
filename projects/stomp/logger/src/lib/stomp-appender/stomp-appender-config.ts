@@ -5,5 +5,5 @@ import { StompHeaders } from '@stomp/stompjs';
 export class StompAppenderConfig implements IAppenderConfig {
   level: LogLevel;
   dest: string;
-  headers?: StompHeaders;
+  formatter: (message: string) => {headers: StompHeaders, message: string};
 }

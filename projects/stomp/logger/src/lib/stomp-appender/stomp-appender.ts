@@ -10,12 +10,12 @@ export class StompAppender implements IAppender {
   ) {}
 
   add(severity: LogLevel, message: string) {
-    const headers = { ...this.config.headers, severity: `${severity}` };
+    const { headers: headers, message: msg } = this.config.formatter(message);
 
     this.rxStomp.publish({
       destination: this.config.dest,
-      headers,
-      body: message,
+      headers: { ...headers, severity: `${severity}` },
+      body: msg,
     });
   }
 }

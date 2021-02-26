@@ -1,24 +1,71 @@
 # Logger
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
+## Introduction
 
-## Code scaffolding
+## Usage
 
-Run `ng generate component component-name --project logger` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project logger`.
-> Note: Don't forget to add `--project logger` or else it will be added to the default project in your `angular.json` file. 
+### Install
 
-## Build
+```bash
+$ npm i @stomp/logger
+```
 
-Run `ng build logger` to build the project. The build artifacts will be stored in the `dist/` directory.
+###
 
-## Publishing
+Provide a LoggerService, typically in `modules.ts`
 
-After building your library with `ng build logger`, go to the dist folder `cd dist/logger` and run `npm publish`.
+```typescript
+// As per your application logic
+const userId = '9be7ecd3-b706-43ee-9114-628241a808bd';
+const sessionId = '972e139d-2426-4955-b2f9-74532e790722';
 
-## Running unit tests
+function initLoggerService(rxStomp: RxStompService): LoggerService {
+  const stompAppenderConfig = {
+    // Typically a header exchange in RabbitMQ
+    dest: '/exchange/user-log',
+    
+    // Log messages above or equal to this priority
+    level: LogLevel.DEBUG,
+    
+    // This is called just before logging a message
+    // It must retrun headers and message
+    formatter: message => ({
+      headers: {
+        user: userId,
+        session: sessionId,
+        ts: `${Date.now()}`
+      },
+      message
+    })
+  };
 
-Run `ng test logger` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  const stompAppender = new StompAppender(stompAppenderConfig, rxStomp);
 
-## Further help
+  const config: LoggerConfig = {
+    // In future more appender types can be supported
+    appenders: [stompAppender],
+  };
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  return new LoggerService(config);
+}
+
+@NgModule({
+  // ...
+  providers: [
+    // ...
+    {
+      provide: LoggerService,
+      useFactory: initLoggerService,
+      deps: [RxStompService],
+    },
+  ],
+  bootstrap: [AppComponent],
+})
+```
+
+To log messages:
+
+```typescript
+// debug, info, warn, error, fatal (same as Ruby logger, or Log4J
+logger.debug('my dibug message');
+```
