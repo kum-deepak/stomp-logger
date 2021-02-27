@@ -1,16 +1,14 @@
 # Logger
 
-## Introduction
+An Angular Logger service with multiple Appenders.
 
-## Usage
-
-### Install
+## Install
 
 ```bash
 $ npm i @stomp/logger
 ```
 
-###
+## Usage
 
 Provide a LoggerService, typically in `modules.ts`
 
@@ -20,30 +18,40 @@ const userId = '9be7ecd3-b706-43ee-9114-628241a808bd';
 const sessionId = '972e139d-2426-4955-b2f9-74532e790722';
 
 function initLoggerService(rxStomp: RxStompService): LoggerService {
+  // STOMP Appender will publish each log message to the provided destination
   const stompAppenderConfig = {
-    // Typically a header exchange in RabbitMQ
+    // mandatory, the STOMP destination, typically a header/topic Exchange
     dest: '/exchange/user-log',
-    
-    // Log messages above or equal to this priority
+    // Minimum severity level to log
     level: LogLevel.DEBUG,
-    
-    // This is called just before logging a message
-    // It must retrun headers and message
+    // Provide a header for each log message
+    // You may also alter the message
     formatter: message => ({
       headers: {
         user: userId,
         session: sessionId,
-        ts: `${Date.now()}`
+        ts: `${Date.now()}`,
       },
-      message
-    })
+      message,
+    }),
   };
-
   const stompAppender = new StompAppender(stompAppenderConfig, rxStomp);
 
+  // Console Appender will show the messages on the console
+  // The console does not have a call for `fatal` to that will be logged using
+  // `console.error`
+  const consoleAppender = new ConsoleAppender({
+    // Minimum severity level to log
+    level: LogLevel.DEBUG,
+    // This is optional - it allows to modify the message being logged.
+    // You can return an Array which will be passed to the console method
+    // You may also alter the message.
+    formatter: message => [new Date(), message],
+  });
+
   const config: LoggerConfig = {
-    // In future more appender types can be supported
-    appenders: [stompAppender],
+    // You can use any number of appenders
+    appenders: [stompAppender, consoleAppender],
   };
 
   return new LoggerService(config);
@@ -67,5 +75,10 @@ To log messages:
 
 ```typescript
 // debug, info, warn, error, fatal (same as Ruby logger, or Log4J
-logger.debug('my dibug message');
+logger.debug('my debug message');
 ```
+
+## New Appender
+
+Implementing a new Appender is not complicated.
+See code for existing Appenders for help.
