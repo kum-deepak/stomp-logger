@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { LoggerConfig } from './logger-config';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { LogLevel } from './log-level';
 
 @Injectable()
