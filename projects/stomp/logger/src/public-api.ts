@@ -11,3 +11,6 @@ export * from './lib/logger/logger-service';
 
 export * from './lib/stomp-appender/stomp-appender-config';
 export * from './lib/stomp-appender/stomp-appender';
+
+export * from './lib/console-appender/console-appender-config';
+export * from './lib/console-appender/console-appender';
