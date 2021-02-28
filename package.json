@@ -1,13 +1,18 @@
 {
-  "name": "stomp-logger",
-  "version": "0.0.1",
+  "name": "@stomp/logger",
+  "version": "0.0.4",
+  "description": "Logger featuring multiple appenders",
+  "scripts": {
+    "clean": "rm -rf bundles esm6",
+    "build-webpack": "webpack && webpack --mode=production --output-filename=stomp-logger.umd.min.js",
+    "build": "npm run clean && npx tsc && npm run build-webpack",
+    "lint": "tslint 'src/**/*.ts'",
+    "prettier": "prettier --write .",
+    "prepublishOnly": "npm run lint && npm run build"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/stomp-js/stomp-logger"
-  },
-  "author": {
-    "name": "Deepak Kumar",
-    "email": "deepak@kreatio.com"
+    "url": "git+https://github.com/stomp-js/stomp-logger.git"
   },
   "keywords": [
     "stompjs",
@@ -17,53 +22,29 @@
     "logger",
     "stomp"
   ],
+  "author": "deepak@kreatio.com",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/stomp-js/stomp-logger/issues"
   },
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "~9.0.0",
-    "@angular/common": "~9.0.0",
-    "@angular/compiler": "~9.0.0",
-    "@angular/core": "~9.0.0",
-    "@angular/forms": "~9.0.0",
-    "@angular/platform-browser": "~9.0.0",
-    "@angular/platform-browser-dynamic": "~9.0.0",
-    "@angular/router": "~9.0.0",
-    "rxjs": "~6.5.4",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+  "homepage": "https://github.com/stomp-js/stomp-logger#readme",
+  "peerDependencies": {
+    "@stomp/rx-stomp": "^1.0.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.900.7",
-    "@angular-devkit/build-ng-packagr": "~0.900.7",
-    "@angular/cli": "~9.0.0",
-    "@angular/compiler-cli": "~9.0.0",
-    "@angular/language-service": "~9.0.0",
-    "@types/node": "^12.11.1",
-    "@types/jasmine": "~3.5.0",
-    "@types/jasminewd2": "~2.0.3",
-    "codelyzer": "^5.1.2",
-    "jasmine-core": "~3.5.0",
-    "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~4.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage-istanbul-reporter": "~2.1.0",
-    "karma-jasmine": "~2.0.1",
-    "karma-jasmine-html-reporter": "^1.4.2",
-    "ng-packagr": "^9.0.0",
-    "protractor": "~5.4.3",
-    "ts-node": "~8.3.0",
-    "tslint": "~5.18.0",
-    "typescript": "~3.7.5"
-  }
+    "@stomp/rx-stomp": "^1.0.2",
+    "awesome-typescript-loader": "^5.2.0",
+    "prettier": "^2.1.2",
+    "rxjs": "^6.6.6",
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "=3.6.4",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.2"
+  },
+  "module": "./esm6/index.js",
+  "main": "bundles/stomp-logger.umd.js",
+  "typings": "index.d.ts",
+  "sideEffects": false,
+  "dependencies": {}
 }

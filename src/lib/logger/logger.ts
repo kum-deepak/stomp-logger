@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
 import { LoggerConfig } from './logger-config';
 import { LogLevel } from './log-level';
 
-@Injectable()
-export class LoggerService {
+export class Logger {
   constructor(public config: LoggerConfig) {}
 
   public add(severity: LogLevel, message: string): void {
